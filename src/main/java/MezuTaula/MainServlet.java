@@ -49,7 +49,8 @@ public class MainServlet extends HttpServlet {
             if (request.getSession(false) != null) {
                 System.out.println("---> MainServlet ---> User is logged: redirecting to welcome.jsp");
 
-                String format = request.getParameter("format");
+                    String format = request.getParameter("format");
+
                 if (format != null){ // HTTP erantzunaren edukia json
                     System.out.println("\tConverting ArrayList<MessageInfo> to json");
                     ArrayList<MessageInfo> messageList = mySQLdb.getAllMessages();

@@ -23,6 +23,54 @@
 <head>
     <title>View Messages</title>
     <link href="/MezuTaula/css/styleSheet.css" rel="stylesheet" />
+    <script>
+        function GetTimeIO(){
+            //ondorengo objetua erabiliz, JS kodea HTTP eskaerak egin ditzake (azterketan sartu)
+            var request = new XMLHttpRequest(); //AJAX
+
+            // http://www.w3schools.com/xml/ajax_xmlhttprequest_response.asp
+            request.onreadystatechange = function() {
+                if (request.readyState == 4){ // 4: request finished and response is ready
+                    if (request.status == 200) {
+                        var json = request.responseText; // HTTP erantunetik JSON katea atera
+                        var jsonObj = JSON.parse(json); // JSON katea hiztegi moduko objetu bihurtu
+
+                        var taula = document.getElementById("MezuTaula"); //Taula elementua atera
+
+                        var errenkadak = taula.getElementsByTagName('tr');
+                        var errenkdaCount = errenkadak.length;
+                        for (var i=1; i<errenkdaCount; i++){
+                            errenkadak[1].remove();
+                        }
+
+                        // taula berreraiki
+                        errenkdaCount = jsonObj.length;
+                        for (var i=0; i<errenkdaCount; i++){
+                            var errenkada = document.createElement('tr');
+
+                            var username = jsonObj[i].username;
+                            var gelaxka_username = document.createElement('td');
+                            gelaxka_username.innerHTML = username;
+                            errenkada.appendChild(gelaxka_username);
+
+                            var message = jsonObj[i].message;
+                            var gelaxka_message = document.createElement('td');
+                            gelaxka_message.innerHTML = message;
+                            errenkada.appendChild(gelaxka_message);
+
+                            taula.appendChild(errenkada);
+                        }
+                    }
+                }
+            }
+
+            request.open("GET", "/MezuTaula/servlet/MainServlet?format=json", true); //true-->async
+            request.send(null); //eskaera bidali
+
+            setTimeout("GetTimeIO()", 5000);
+        }
+        setTimeout("GetTimeIO()", 5000); //5s barru GetTimeIO funtzioa deitu
+    </script>
 </head>
 
 <body>
